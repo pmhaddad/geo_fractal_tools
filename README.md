@@ -1,6 +1,14 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # Fractal tools - A Python ArcGIS toolbox to calculate fractal dimensions
+<p align="center">
+  <img src="figures/epigraph.jpg" width="512" style="display: block; margin: auto;" />
+</p>
+
+> *During their earliest field training, geologists are taught to place an object of known size, such as a rock hammer or a lens cap, in photographs of outcrops in order to convey a sense of scale. Why?*</br>
+> </br>
+> *Christopher C. Barton e Paul R. La Pointe,*</br>
+> **Fractals in the Earth Sciences**
 
 ## Background
 This repository was created to share some of the scripts developed during the evolution of my Master's Degree dissertation, entitled:
