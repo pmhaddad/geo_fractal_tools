@@ -17,7 +17,9 @@
 # It repeats the procedure as many times as indicated by parameter 'i' (number of iterations). For each iteration 'delta' is equal to half the previous 'delta'
 ###############################################
 
-import os, arcpy
+import os
+
+import arcpy
 
 # Input shapefile with the point pattern to be analized
 input = arcpy.GetParameterAsText(0)
@@ -45,40 +47,40 @@ file_name = arcpy.GetParameterAsText(6)
 contagens = list()
 raster_list = list()
 while i >= 0:
-	
-	# The name of the raster generated in each step is its 'delta' value. It is saved in the output directory
-	output_raster = os.path.join(output_dir, str(delta) + "m.tif")
-	raster_list.append(output_raster)
-	if desc_input.shapeType == 'Point':
-		arcpy.PointToRaster_conversion(input, campo, output_raster, "MOST_FREQUENT", "", delta)
-	if desc_input.shapeType == 'Polyline':
-		arcpy.PolylineToRaster_conversion(input, campo, output_raster, "MAXIMUM_LENGTH", "", delta)
-	# For each raster generated, extract a tuple with the pair 'delta' and 'n(delta)'
-	fc = output_raster
-	cursor = arcpy.SearchCursor(fc)
-	count = 0
-	for row in cursor:
-		count = count + row.getValue("Count")
-	contagens.append((delta, count))
-	
-	# Halve boxes sides, and prepare for the next iteration
-	delta = delta / 2
-	i = i - 1
+    # The name of the raster generated in each step is its 'delta' value. It is saved in the output directory
+    output_raster = os.path.join(output_dir, str(delta) + 'm.tif')
+    raster_list.append(output_raster)
+    if desc_input.shapeType == 'Point':
+        arcpy.PointToRaster_conversion(input, campo, output_raster, 'MOST_FREQUENT', '', delta)
+    if desc_input.shapeType == 'Polyline':
+        arcpy.PolylineToRaster_conversion(input, campo, output_raster, 'MAXIMUM_LENGTH', '', delta)
+
+    # For each raster generated, extract a tuple with the pair 'delta' and 'n(delta)'
+    fc = output_raster
+    cursor = arcpy.SearchCursor(fc)
+    count = 0
+    for row in cursor:
+        count = count + row.getValue('Count')
+    contagens.append((delta, count))
+
+    # Halve boxes sides, and prepare for the next iteration
+    delta = delta / 2
+    i = i - 1
 
 # Save a text file with the results in the format 'n(delta)' X 'delta'
 file = open(file_name, 'w')
-file.write("delta n(delta)\n")
+file.write('delta n(delta)\n')
 for contagem in contagens:
-	file.write(str(contagem[0]) + ' ' + str(int(contagem[1])) + '\n')
+    file.write(str(contagem[0]) + ' ' + str(int(contagem[1])) + '\n')
 file.close()
 
 # Insert all created rasters to the current data frame
-mxd = arcpy.mapping.MapDocument("CURRENT")
+mxd = arcpy.mapping.MapDocument('CURRENT')
 data_frame = arcpy.mapping.ListDataFrames(mxd)[0]
 for raster in raster_list:
-	result = arcpy.MakeRasterLayer_management(raster, raster.split('\\')[-1])
-	layer = result.getOutput(0)
-	arcpy.mapping.AddLayer(data_frame, layer, 'AUTO_ARRANGE')
-	
+    result = arcpy.MakeRasterLayer_management(raster, raster.split('\\')[-1])
+    layer = result.getOutput(0)
+    arcpy.mapping.AddLayer(data_frame, layer, 'AUTO_ARRANGE')
+
 arcpy.RefreshActiveView()
-arcpy.env.extent = "DEFAULT"
+arcpy.env.extent = 'DEFAULT'
