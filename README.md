@@ -46,7 +46,7 @@ The header contains abundant information about the script logic, expected inputs
 
 > **Note**: Unfortunately, this being one of my first practical applications in developing ArcGIS tools, I did not record the specific versions of each dependency in the environment where scripts were run.
 > But it is worth mentioning that the libraries used were from the newest versions available around the time these tools were developed, _i.e._, between the end of 2015 and the beginning of 2016.</br>
-> Additionally, I would like to point out that these scripts are being made public without any alteration in comparison when they were originally written. **As such, it is probable that they need to be adapted if one wants to use them in newer versions of ArcMap or ArcGIS Online**.
+> Additionally, I would like to point out that these scripts are being made public without any alteration in comparison when they were originally written (with the exception of cosmetic changes to better conform to [PEP8 conventions](https://www.python.org/dev/peps/pep-0008/)). **As such, it is probable that they need to be adapted if one wants to use them in newer versions of ArcMap or ArcGIS Online**.
 
 ## Getting your hands dirty
 This repository also contains a **FractalTools** toolbox file (`.tbx`), used to import the scripts within ArcMap, and run them with ease (for importing instructions, see this [video tutorial](https://www.youtube.com/watch?v=y4cwwlXQQJ0)). To use it, one has to download all scripts and the toolbox file, and save them all on the same directory.
