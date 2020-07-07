@@ -17,7 +17,10 @@
 # It createas a single shapefile merging all shapefiles generated earlier, and then performs density calculations
 ###############################################
 
-import os, arcpy, string
+import os
+import string
+
+import arcpy
 
 # Input shapefile with the point pattern to be analized
 input_points = arcpy.GetParameterAsText(0)
@@ -33,7 +36,7 @@ threshold = arcpy.GetParameterAsText(3)
 
 # Set the study area limits
 study_area = arcpy.GetParameterAsText(4)
-arcpy.MakeFeatureLayer_management(study_area, "study_area_layer")
+arcpy.MakeFeatureLayer_management(study_area, 'study_area_layer')
 
 # Output text file name that will contain analysis results
 txt_name = arcpy.GetParameterAsText(5)
@@ -43,51 +46,53 @@ outputs_to_merge = list()
 split_threshold = list()
 
 letter = string.ascii_lowercase
-l = 0
+index = 0
 
 while True:
-    
-	# The name of the shapefile generated in each step is its threshold value, preceeded by a letter to facilitate ordering in ArcCatalog
-	output_shp = os.path.join(output_dir, letter[l] + "_" + str(threshold) + "m.shp")
-	outputs_to_merge.append(output_shp)
-	arcpy.Buffer_analysis(input_points, output_shp, str(threshold) + " Meters", dissolve_option = "ALL", method = "PLANAR")
-	split_threshold.append(int(threshold))
-	
-	# Checks if the buffer created already covers the hole study area 
-	arcpy.SelectLayerByLocation_management('study_area_layer', 'COMPLETELY_WITHIN', output_shp)
-	shape_description = arcpy.Describe('study_area_layer') #Creates a 'Describe object'
-	if shape_description.FIDSet != '': break
-	
-	# If the buffer do not cover the hole study area, the threshold is doubled and analysis proceed
-	threshold = 2 * int(threshold)
-	l = l + 1
+    # The name of the shapefile generated in each step is its threshold value, preceeded by...
+    # ...a letter to facilitate ordering in ArcCatalog
+    output_shp = os.path.join(output_dir, letter[index] + '_' + str(threshold) + 'm.shp')
+    outputs_to_merge.append(output_shp)
+    arcpy.Buffer_analysis(input_points, output_shp, str(threshold) + ' Meters', dissolve_option='ALL', method='PLANAR')
+    split_threshold.append(int(threshold))
+
+    # Checks if the buffer created already covers the hole study area
+    arcpy.SelectLayerByLocation_management('study_area_layer', 'COMPLETELY_WITHIN', output_shp)
+    shape_description = arcpy.Describe('study_area_layer')  # Creates a 'Describe object'
+    if shape_description.FIDSet != '':
+        break
+
+    # If the buffer do not cover the hole study area, the threshold is doubled and analysis proceed
+    threshold = 2 * int(threshold)
+    index = index + 1
 
 # Merge the shapefiles for each radius in one single shapefile
 arcpy.Merge_management(outputs_to_merge, file_name)
 
 # Create field 'radius' to store each radius used (in meters)
-arcpy.AddField_management(file_name, "radius", "FLOAT")
+arcpy.AddField_management(file_name, 'radius', 'FLOAT')
 with arcpy.da.UpdateCursor(file_name, ['radius']) as cursor:
-	i = 0
-	for row in cursor:
-		row[0] = split_threshold[i]
-		cursor.updateRow(row)
-		i = i + 1
+    i = 0
+    for row in cursor:
+        row[0] = split_threshold[i]
+        cursor.updateRow(row)
+        i = i + 1
 
 # To facilitate further analysis, add a field with radius in kilometers
-arcpy.AddField_management(file_name, "rdius_km", "FLOAT")
-arcpy.CalculateField_management(file_name, "rdius_km", "float(!radius!) / 1000", "PYTHON_9.3")
+arcpy.AddField_management(file_name, 'rdius_km', 'FLOAT')
+arcpy.CalculateField_management(file_name, 'rdius_km', 'float(!radius!) / 1000', 'PYTHON_9.3')
 
 # Calculate the total area for each radius used
-arcpy.AddGeometryAttributes_management(file_name, "AREA", Area_Unit = "SQUARE_METERS")
+arcpy.AddGeometryAttributes_management(file_name, 'AREA', Area_Unit='SQUARE_METERS')
 
 # Create field 'n_points' to store the number of points used, and use 'Calculate Field' tool to obtain this number
-arcpy.AddField_management(file_name, "n_points", "SHORT")
-arcpy.CalculateField_management(file_name, "n_points", arcpy.GetCount_management(input_points), "PYTHON_9.3")
+arcpy.AddField_management(file_name, 'n_points', 'SHORT')
+arcpy.CalculateField_management(file_name, 'n_points', arcpy.GetCount_management(input_points), 'PYTHON_9.3')
 
-# Create field 'rad_dens' to store the radial density for each radius, and use 'Calculate Field' tool to obtain this number (result in square km)
-arcpy.AddField_management(file_name, "rad_dens", "FLOAT")
-arcpy.CalculateField_management(file_name, "rad_dens", "(float(!n_points!) / !POLY_AREA!) * 1000000", "PYTHON_9.3")
+# Create field 'rad_dens' to store the radial density for each radius, and use...
+# ...'Calculate Field' tool to obtain this number (result in square km)
+arcpy.AddField_management(file_name, 'rad_dens', 'FLOAT')
+arcpy.CalculateField_management(file_name, 'rad_dens', '(float(!n_points!) / !POLY_AREA!) * 1000000', 'PYTHON_9.3')
 
 # Save a text file with the attribute table of the result shapefile
-arcpy.ExportXYv_stats (file_name, ["RADIUS", "RDIUS_KM", "POLY_AREA", "N_POINTS", "RAD_DENS"], "SEMI-COLON", txt_name, "ADD_FIELD_NAMES")
+arcpy.ExportXYv_stats(file_name, ['RADIUS', 'RDIUS_KM', 'POLY_AREA', 'N_POINTS', 'RAD_DENS'], 'SEMI-COLON', txt_name, 'ADD_FIELD_NAMES')
