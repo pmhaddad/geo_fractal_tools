@@ -83,7 +83,7 @@ arcpy.AddField_management(file_name, 'rdius_km', 'FLOAT')
 arcpy.CalculateField_management(file_name, 'rdius_km', 'float(!radius!) / 1000', 'PYTHON_9.3')
 
 # Calculate the total area for each radius used
-arcpy.AddGeometryAttributes_management(file_name, 'AREA', Area_Unit='SQUARE_METERS')
+arcpy.AddGeometryAttributes_management(file_name, 'AREA_GEODESIC', Area_Unit='SQUARE_METERS')
 
 # Create field 'n_points' to store the number of points used, and use 'Calculate Field' tool to obtain this number
 arcpy.AddField_management(file_name, 'n_points', 'SHORT')
@@ -92,7 +92,7 @@ arcpy.CalculateField_management(file_name, 'n_points', arcpy.GetCount_management
 # Create field 'rad_dens' to store the radial density for each radius, and use...
 # ...'Calculate Field' tool to obtain this number (result in square km)
 arcpy.AddField_management(file_name, 'rad_dens', 'FLOAT')
-arcpy.CalculateField_management(file_name, 'rad_dens', '(float(!n_points!) / !POLY_AREA!) * 1000000', 'PYTHON_9.3')
+arcpy.CalculateField_management(file_name, 'rad_dens', '(float(!n_points!) / !AREA_GEO!) * 1000000', 'PYTHON_9.3')
 
 # Save a text file with the attribute table of the result shapefile
-arcpy.ExportXYv_stats(file_name, ['RADIUS', 'RDIUS_KM', 'POLY_AREA', 'N_POINTS', 'RAD_DENS'], 'SEMI-COLON', txt_name, 'ADD_FIELD_NAMES')
+arcpy.ExportXYv_stats(file_name, ['RADIUS', 'RDIUS_KM', 'AREA_GEO', 'N_POINTS', 'RAD_DENS'], 'SEMI-COLON', txt_name, 'ADD_FIELD_NAMES')
