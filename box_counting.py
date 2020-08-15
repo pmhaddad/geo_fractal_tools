@@ -57,10 +57,10 @@ while i >= 0:
 
     # For each raster generated, extract a tuple with the pair 'delta' and 'n(delta)'
     fc = output_raster
-    cursor = arcpy.SearchCursor(fc)
+    cursor = arcpy.da.SearchCursor(fc, 'Count')
     count = 0
     for row in cursor:
-        count = count + row.getValue('Count')
+        count = count + row[0]
     contagens.append((delta, count))
 
     # Halve boxes sides, and prepare for the next iteration
