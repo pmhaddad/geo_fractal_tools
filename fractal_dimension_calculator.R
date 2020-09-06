@@ -1,6 +1,6 @@
 library(dplyr)
 
-# Pede ao usuario um arquivo de input
+# Ask an input file from the user
 input <- file.choose()
 dados <- read.delim2(file = input)
 
@@ -23,6 +23,6 @@ for (box in boxes){
 frac_dim <- data.frame(box_id, fractal_dimension, r_squared)
 print(frac_dim)
 
-# Pede ao usuario o nome do arquivo de output. Como padrao, salva no mesmo diretorio do script
+# Ask an output file name from the user. Defaults to saving in the same directory of this script
 output <- readline(prompt = "Digite o nome do arquivo de saida: ")
 write.table(frac_dim, file = output, dec = ',', row.names = FALSE, col.names = TRUE)
