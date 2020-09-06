@@ -7,7 +7,7 @@
 
 > *During their earliest field training, geologists are taught to place an object of known size, such as a rock hammer or a lens cap, in photographs of outcrops in order to convey a sense of scale. Why?*</br>
 > </br>
-> *Christopher C. Barton e Paul R. La Pointe,*</br>
+> *Christopher C. Barton and Paul R. La Pointe,*</br>
 > **Fractals in the Earth Sciences**
 
 ## Background
