@@ -54,3 +54,14 @@ This repository also contains a **FractalTools** toolbox file (`.tbx`), used to 
 After import, the user will have at disposal a toolbox called **Fractal Tools**, with each script available as an individual tool.
 
 > **Note**: The toolbox file is only compatible with ArcGIS 10.3 or newer.
+
+## General recommendations
+Some recommendations are in order to avoid some common errors:
+
+* Make sure that the paths for your project's Working Directory and shapefiles do not contain any spaces or special characters (such as diacritics)
+* It is recommended that the project's Data Frame uses a projected coordinate system (_e.g._, UTM)
+* It is recommended that all shapefiles being used on the project have the same projected coordinate system than the map's Data Frame
+* Make sure that study area boundaries are perfectly oriented in the NS-EW directions, so that the study area can be completely covered by pixels created by the fractal scripts
+* Make sure that study area sides are multiples of the cell size used in your analysis. Example: if the starting box size is 2,000m, make sure the study area borders are multiples of 2,000. This is in to make sure the whole study area is properly analyzed.
+* Adjust ArcGIS' Environment Settings for **Current Workspace** to the directory where your project is stored
+* Make sure to set your **Geoprocessing Options** to run scripts on the foreground, not in the background (see [this link](https://desktop.arcgis.com/en/arcmap/10.3/analyze/executing-tools/foreground-and-background-processing.htm) for more information)
