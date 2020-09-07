@@ -15,13 +15,15 @@ This repository was created to share some of the scripts developed during the ev
 
 > [Fractais e implicações para mapas de favorabilidade mineral: o exemplo dos depósitos iron oxide-copper-gold de Carajás (PA)](http://repositorio.unicamp.br/handle/REPOSIP/330385)
 
-The repository contains three scripts used to perform the fractal analyses used in my dissertation. Each of the three scripts covers one method to determine the fractal dimension of geometric patterns:
+The repository contains three Python scripts used to perform the fractal analyses used in my dissertation. Each of the three scripts covers one method to determine the fractal dimension of geometric patterns:
 
 * Box-counting fractal dimension (_D<sub>B</sub>_)
 * Moving box-counting fractal dimension (_D<sub>B</sub>_)
 * Radial-density fractal dimension (_D<sub>R</sub>_)
 
-A review of how these methods work, and their application within the context of my dissertation can be found on the paper:
+This repository also contains a fourth script, written in R (`fractal_dimension_calculator.R`) that is used to process the raw output of the Moving box-counting script (which only returns box counts), and indeed calculate the fractal dimensions for each moving box.
+
+A review of how these fractal methods work, and their application within the context of my dissertation can be found on the paper:
 
 > [Spatial analysis of mineral deposit distribution: A review of methods and implications for structural controls on iron oxide-copper-gold mineralization in Carajás, Brazil](https://www.sciencedirect.com/science/article/pii/S0169136816302049).
 
@@ -49,9 +51,9 @@ The header contains abundant information about the script logic, expected inputs
 > Additionally, I would like to point out that these scripts are being made public with only minor alterations in comparison when they were originally written (with the exception of cosmetic changes to better conform to [PEP8 conventions](https://www.python.org/dev/peps/pep-0008/)). **As such, it is probable that they need to be adapted if one wants to use them in newer versions of ArcMap or ArcGIS Online**.
 
 ## Getting your hands dirty
-This repository also contains a **FractalTools** toolbox file (`.tbx`), used to import the scripts within ArcMap, and run them with ease (for importing instructions, see this [video tutorial](https://www.youtube.com/watch?v=y4cwwlXQQJ0)). To use it, one has to download all scripts and the toolbox file, and save them all on the same directory.
+This repository also contains a **FractalTools** toolbox file (`.tbx`), used to import the Python scripts within ArcMap, and run them with ease (for importing instructions, see this [video tutorial](https://www.youtube.com/watch?v=y4cwwlXQQJ0)). To use it, one has to download all scripts and the toolbox file, and save them all on the same directory.
 
-After import, the user will have at disposal a toolbox called **Fractal Tools**, with each script available as an individual tool.
+After import, the user will have at disposal a toolbox called **Fractal Tools**, with each Python script available as an individual tool.
 
 > **Note**: The toolbox file is only compatible with ArcGIS 10.3 or newer.
 
